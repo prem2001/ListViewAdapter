@@ -3,18 +3,17 @@ package base.fire.com.listviewadapter.activity;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import base.fire.com.listviewadapter.adapter.ChatCursorAdapter;
 import base.fire.com.listviewadapter.R;
+import base.fire.com.listviewadapter.adapter.CustomBaseAdapter;
 import base.fire.com.listviewadapter.database.DatabaseManager;
 import base.fire.com.listviewadapter.model.ModelItem;
 
@@ -36,7 +35,7 @@ public class MainAcivityListView extends Activity implements
             R.drawable.straw};
 
     ListView listView;
-    List<ModelItem> rowItems;
+    ArrayList<ModelItem> modelItemArrayList;
 
     /**
      * Called when the activity is first created.
@@ -46,16 +45,18 @@ public class MainAcivityListView extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        rowItems = new ArrayList<ModelItem>();
+        modelItemArrayList = new ArrayList<ModelItem>();
         for (int i = 0; i < titles.length; i++) {
             ModelItem item = new ModelItem(images[i], titles[i], descriptions[i]);
-            rowItems.add(item);
+            modelItemArrayList.add(item);
         }
 
         listView = (ListView) findViewById(R.id.list);
-//        CustomBaseAdapter adapter = new CustomBaseAdapter(this, rowItems);
-//        listView.setAdapter(adapter);
-        loadingDataBase();
+        CustomBaseAdapter adapter = new CustomBaseAdapter(this, modelItemArrayList);
+        listView.setAdapter(adapter);
+
+//        loadingDataBase();
+
         listView.setOnItemClickListener(this);
     }
 
@@ -65,7 +66,7 @@ public class MainAcivityListView extends Activity implements
         String titleId = ((ModelItem) parent.getItemAtPosition(position)).getTitle();
 
         Toast toast = Toast.makeText(getApplicationContext(),
-                "Item " + (position + 1) + ": " + rowItems.get(position),
+                "Item " + (position + 1) + ": " + modelItemArrayList.get(position),
                 Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         toast.show();
@@ -76,9 +77,12 @@ public class MainAcivityListView extends Activity implements
         dbManager.open();
         dbManager.insertDataToSqliteDB("PREM", "NATH");
         Cursor history = dbManager.getFirstRowData();
-        ChatCursorAdapter viewAdapter = new ChatCursorAdapter(MainAcivityListView.this, history, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-        viewAdapter.notifyDataSetChanged();
-        listView.setAdapter(viewAdapter);
+
+        String data = dbManager.getAllData();
+        Log.e("PREM",data);
+//        ChatCursorAdapter viewAdapter = new ChatCursorAdapter(MainAcivityListView.this, history, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+//        viewAdapter.notifyDataSetChanged();
+//        listView.setAdapter(viewAdapter);
         dbManager.close();
 
 

@@ -90,6 +90,22 @@ public final class DatabaseManager {
 
     }
 
+    public String getAllData() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String data=null;
+        Cursor cursor = db.rawQuery("select * from "+DatabaseField.ChatMessages.TABLE_NAME, null);
+        if (cursor.moveToFirst()){
+            do{
+            data = cursor.getString(cursor.getColumnIndex("first"));
+            // do what ever you want here
+            }while(cursor.moveToNext());
+        }
+        cursor.close();
+        return data;
+    }
+
+
 
     /**
      * Database implementation class
