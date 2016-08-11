@@ -1,4 +1,4 @@
-package base.fire.com.listviewadapter;
+package base.fire.com.listviewadapter.adapter;
 
 /**
  * Created by prem on 11/8/16.
@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import base.fire.com.listviewadapter.R;
+import base.fire.com.listviewadapter.model.ModelItem;
 
 
 public class CustomBaseAdapter extends BaseAdapter {

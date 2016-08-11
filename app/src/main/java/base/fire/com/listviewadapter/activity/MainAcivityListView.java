@@ -1,15 +1,22 @@
-package base.fire.com.listviewadapter;
+package base.fire.com.listviewadapter.activity;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import base.fire.com.listviewadapter.adapter.ChatCursorAdapter;
+import base.fire.com.listviewadapter.R;
+import base.fire.com.listviewadapter.database.DatabaseManager;
+import base.fire.com.listviewadapter.model.ModelItem;
 
 public class MainAcivityListView extends Activity implements
         AdapterView.OnItemClickListener {
@@ -46,8 +53,9 @@ public class MainAcivityListView extends Activity implements
         }
 
         listView = (ListView) findViewById(R.id.list);
-        CustomBaseAdapter adapter = new CustomBaseAdapter(this, rowItems);
-        listView.setAdapter(adapter);
+//        CustomBaseAdapter adapter = new CustomBaseAdapter(this, rowItems);
+//        listView.setAdapter(adapter);
+        loadingDataBase();
         listView.setOnItemClickListener(this);
     }
 
@@ -61,5 +69,18 @@ public class MainAcivityListView extends Activity implements
                 Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         toast.show();
+    }
+
+    private void loadingDataBase() {
+        DatabaseManager dbManager = new DatabaseManager(this);
+        dbManager.open();
+        dbManager.insertDataToSqliteDB("PREM", "NATH");
+        Cursor history = dbManager.getFirstRowData();
+        ChatCursorAdapter viewAdapter = new ChatCursorAdapter(MainAcivityListView.this, history, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        viewAdapter.notifyDataSetChanged();
+        listView.setAdapter(viewAdapter);
+        dbManager.close();
+
+
     }
 }

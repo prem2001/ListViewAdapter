@@ -1,4 +1,4 @@
-package base.fire.com.listviewadapter;
+package base.fire.com.listviewadapter.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;
