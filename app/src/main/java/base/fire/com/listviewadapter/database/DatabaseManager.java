@@ -21,11 +21,7 @@ public final class DatabaseManager {
     //Activity context
     private Context context;
 
-    /**
-     * Constructor with the context
-     *
-     * @param context: for DB helper object initialization
-     */
+
     public DatabaseManager(Context context) {
         this.context = context;
     }
@@ -134,23 +130,14 @@ public final class DatabaseManager {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
 
-        /**
-         * //****by this onCreate method when new object(atabaseManager dbManager = new DatabaseManager(this);)
-         * // these three table will creted automatically
-         *
-         * @param db
-         */
+
 
         public void onCreate(SQLiteDatabase db) {
 
             db.execSQL(SQL_CREATE_CHAT_MESSAGES);
         }
 
-        /**
-         * @param db
-         * @param oldVersion
-         * @param newVersion
-         */
+
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             if (newVersion > oldVersion) {
                 db.execSQL(SQL_DELETE_CHAT_MESSAGES);
